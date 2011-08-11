@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<!-- <bean id="enEncryptionService" class="org.kuali.rice.core.service.impl.DESEncryptionService" lazy-init="true" /> -->
+	<bean id="enEncryptionService" class="org.kuali.rice.core.service.impl.DemonstrationGradeEncryptionServiceImpl" lazy-init="true">
+		<property name="secretKey">
+			<bean class="org.kuali.rice.core.config.spring.ConfigPropertyFactoryBean">
+				<property name="name" value="encryption.key"/>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="digitalSignatureService" class="org.kuali.rice.ksb.security.service.impl.DigitalSignatureServiceImpl" lazy-init="true" />
+	<bean id="ksbJavaSecurityManagementService" class="org.kuali.rice.ksb.security.admin.service.impl.JavaSecurityManagementServiceImpl" lazy-init="true" />
+
+</beans>
