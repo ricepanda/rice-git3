@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <!-- import the core test spring file -->
+    <import resource="classpath:org/kuali/rice/kew/config/TestKEWSpringBeans.xml"/>
+
+    <!-- then add our own beans that need to live in a client context -->
+
+    <bean class="org.kuali.rice.core.util.GRLServiceInjectionPostProcessor"/>
+
+    <bean id="riceServiceInjectedObject" class="org.kuali.rice.core.util.RiceServiceInjectedObject">
+        <property name="wireMeInSpring" value="A Spring-wired value"/>
+    </bean>
+    
+    <bean id="riceServiceInjectedDescendent" class="org.kuali.rice.core.util.RiceServiceInjectedDescendent" depends-on="rice">
+        <property name="wireMeInSpring" value="A Spring-wired value in the descendent"/>
+    </bean>
+
+    <!-- Exercising overriding a Rice service without having to pull the definition of each and every
+         injected bean -->    
+    <bean id="documentService" class="org.kuali.rice.core.util.ClientDocumentServiceImpl"/>
+    <bean id="documentDao" class="org.kuali.rice.core.util.ClientDocumentDaoOjb">
+        <property name="jcdAlias" value="knsDataSource" />
+    </bean>
+
+</beans>
