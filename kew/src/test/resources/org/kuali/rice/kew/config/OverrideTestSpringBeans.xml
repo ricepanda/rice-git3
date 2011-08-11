@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+  <bean id="enExceptionRoutingService" class="org.kuali.rice.kew.routemanager.TestExceptionRoutingServiceImpl"/>
+  <bean id="enEmailService" class="mocks.MockDefaultEmailServiceImpl" />
+  <bean id="enDocumentRequeuerService" class="mocks.MockDocumentRequeuerImpl" />
+  <bean id="enActionListEmailService" class="mocks.MockEmailNotificationServiceImpl">
+    <property name="deploymentEnvironment">
+      <value>${environment}</value>
+    </property>
+    <property name="emailContentGenerator">
+      <bean class="mocks.MockStyleableEmailContentServiceImpl">
+        <property name="styleService" ref="enStyleService"/>
+      </bean>
+    </property>
+  </bean>
+
+  <!--
+    a "fake" service, used by ServiceInvocationRuleTest; in an ideal demonstration this would live in
+    application space/context/resource loader, but for now it's still in the KEW module context  
+  -->
+  <bean id="fakeService" class="org.kuali.rice.kew.test.FakeServiceImpl"/>
+
+  <bean class="org.kuali.rice.ksb.messaging.KSBExporter">
+	<property name="remotedServiceRegistry" ref="enServiceInvoker"/>  
+    <property name="serviceDefinition">
+      <bean class="org.kuali.rice.ksb.messaging.JavaServiceDefinition">
+        <property name="serviceInterface"><value>org.kuali.rice.kew.test.FakeService</value></property>
+        <property name="service">
+          <ref bean="fakeService"/>
+        </property>
+        <property name="localServiceName" value="fakeService-remote"/>
+        <property name="serviceNameSpaceURI" value="fake"/>
+        <property name="retryAttempts" value="0"/>
+      </bean>
+    </property>
+    <property name="forceRefresh" value="true"/>
+  </bean>
+</beans>
